@@ -211,6 +211,10 @@ class AuthApiTests(TestCase):
         access = self.login().data["access"]
         self.assertEqual(self.client.post("/api/auth/refresh/", {"refresh": access}, format="json").status_code, 401)
 
+    def test_health_check_is_public(self):
+        response = self.client.get("/api/health/")
+        self.assertEqual((response.status_code, response.data), (200, {"status": "ok"}))
+
     def test_garbage_token_is_rejected(self):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer not-a-token")
         self.assertEqual(self.client.get("/api/customers/").status_code, 401)
