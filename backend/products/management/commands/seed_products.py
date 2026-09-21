@@ -60,7 +60,7 @@ class Command(BaseCommand):
                 defaults={
                     "category": category,
                     "price": Decimal(price),
-                    "stock": random.choice([0, 3, 8, 15, 25, 40]),
+                    "stock": random.choice([20, 30, 45, 60, 80]),
                     "description": f"{brand} {name}.",
                     "image_url": image_url,
                 },

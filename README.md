@@ -3,15 +3,18 @@
 A full-stack admin panel for a beauty products store. Manage customers, products and orders,
 and follow sales on a dashboard.
 
-**Live demo:** _add link after deploy_ · **Login:** `admin` / _demo password_
+**Live demo:** https://admin-products-shop.vercel.app · the demo login is shown on the sign-in page
 
-<!--
-Screenshots: add images to docs/screenshots/ and uncomment.
+> The API runs on Render's free plan and sleeps when idle, so the first request after a pause can take about a minute.
 
 ![Dashboard](docs/screenshots/dashboard.png)
-![Orders](docs/screenshots/orders.png)
+
+| Orders | Order details |
+|---|---|
+| ![Orders](docs/screenshots/orders.png) | ![Order details](docs/screenshots/order-details.png) |
+
 ![Products](docs/screenshots/products.png)
--->
+
 
 ## Features
 
@@ -104,7 +107,7 @@ The frontend runs on http://localhost:3000 and reads the API address from `front
 | Command | What it does |
 |---------|--------------|
 | `create_demo_admin` | Creates (or resets the password of) the login user. Uses `--username/--password` or `DEMO_ADMIN_USERNAME/DEMO_ADMIN_PASSWORD`. With `DEBUG` off a password is required. |
-| `seed_demo` | Fills an **empty** database with products, customers and orders; does nothing if data exists |
+| `seed_demo` | Fills an **empty** database with products, customers and orders; does nothing if data exists. `--reset` (or `DEMO_RESET=true`) wipes customers, products and orders first and seeds again; login users are kept |
 | `seed_products` | 25 beauty products with photos (safe to run repeatedly) |
 | `seed_customers --count N` | N fake customers |
 | `seed_orders --count N` | N fake orders spread over the last 30 days |
@@ -160,8 +163,10 @@ Backend (`backend/.env`, see `backend/.env.example`; Docker Compose sets its own
 | `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT` | Database connection |
 | `POSTGRES_SSLMODE` | `require` for hosted databases such as Neon; defaults to `prefer` |
 | `DEMO_ADMIN_USERNAME`, `DEMO_ADMIN_PASSWORD` | Login created by `create_demo_admin` |
+| `DEMO_RESET` | `true` makes `seed_demo` wipe and reseed demo data on every start (handy for a public demo) |
 
-Frontend: `VITE_API_URL`, the API base URL (defaults to `/api`).
+Frontend: `VITE_API_URL`, the API base URL (defaults to `/api`). Optional `VITE_DEMO_USERNAME` and
+`VITE_DEMO_PASSWORD` show a demo account box on the sign-in page (public: use a throwaway account only).
 
 ## Deployment
 

@@ -13,6 +13,11 @@ type LoginValues = z.infer<typeof schema>;
 
 const inputClass = "w-full rounded border border-gray-300 px-3 py-2";
 
+// Demo credentials are optional and public by design: set them on the hosting platform
+// (VITE_DEMO_USERNAME / VITE_DEMO_PASSWORD) only for a throwaway demo account.
+const DEMO_USERNAME = import.meta.env.VITE_DEMO_USERNAME as string | undefined;
+const DEMO_PASSWORD = import.meta.env.VITE_DEMO_PASSWORD as string | undefined;
+
 export function LoginPage() {
   const { isAuthenticated, signIn } = useAuth();
   const navigate = useNavigate();
@@ -23,6 +28,7 @@ export function LoginPage() {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({ resolver: zodResolver(schema) });
 
@@ -48,6 +54,28 @@ export function LoginPage() {
       >
         <h1 className="text-2xl font-medium tracking-tight text-slate-900">Beauty Products Admin</h1>
         <p className="text-sm text-slate-500">Sign in to continue.</p>
+
+        {DEMO_USERNAME && DEMO_PASSWORD && (
+          <div className="rounded-lg border border-blue-100 bg-blue-50 p-3 text-sm">
+            <div className="font-medium text-slate-800">Demo account</div>
+            <div className="mt-1 text-slate-600">
+              Username: <code className="font-semibold">{DEMO_USERNAME}</code>
+            </div>
+            <div className="text-slate-600">
+              Password: <code className="font-semibold">{DEMO_PASSWORD}</code>
+            </div>
+            <button
+              type="button"
+              onClick={() => {
+                setValue("username", DEMO_USERNAME);
+                setValue("password", DEMO_PASSWORD);
+              }}
+              className="mt-2 font-medium text-blue-600 hover:underline"
+            >
+              Fill in
+            </button>
+          </div>
+        )}
 
         <div>
           <label htmlFor="username" className="block text-sm font-medium">

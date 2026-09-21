@@ -236,6 +236,21 @@ class SeedDemoTests(TestCase):
             (products, customers, orders),
         )
 
+    def test_reset_wipes_and_reseeds_but_keeps_users(self):
+        from django.core.management import call_command
+
+        get_user_model().objects.create_user("keepme", password="pw")
+        call_command("seed_demo", verbosity=0)
+        first_ids = set(Product.objects.values_list("id", flat=True))
+
+        call_command("seed_demo", "--reset", verbosity=0)
+
+        self.assertEqual(Customer.objects.count(), 20)
+        self.assertTrue(get_user_model().objects.filter(username="keepme").exists())
+        self.assertFalse(first_ids & set(Product.objects.values_list("id", flat=True)))  # fresh rows
+        self.assertGreater(Product.objects.filter(stock__gt=10).count(), 15)  # mostly well stocked
+        self.assertTrue(Product.objects.filter(stock__lte=5).exists())  # but some are running low
+
     def test_demo_admin_requires_password_when_debug_is_off(self):
         from django.core.management import call_command
         from django.core.management.base import CommandError
