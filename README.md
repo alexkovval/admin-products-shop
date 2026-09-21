@@ -15,6 +15,8 @@ and follow sales on a dashboard.
 
 ![Products](docs/screenshots/products.png)
 
+![Login](docs/screenshots/login.png)
+
 
 ## Features
 
